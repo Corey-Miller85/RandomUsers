@@ -33,8 +33,31 @@ function createCard(data) {
 
 fetchData().then(data => createCard(data));
 
+function createModuleContainer() {
+    const moduleContainer = document.createElement('div')
+    moduleContainer.className = 'modal-container'
+    gallery.appendChild(moduleContainer);
+    const moduleDiv = document.createElement('div')
+    moduleDiv.className = "modal"
+    moduleContainer.appendChild(moduleDiv);
+    const moduleButton = document.createElement('button')
+    moduleButton.type = "button";
+    moduleButton.id = "modal-close-btn";
+    moduleButton.className = "modal-close-btn";
+    moduleButton.innerHTML = `<strong>X</strong>`;
+    moduleDiv.appendChild(moduleButton);
+}
+
 document.addEventListener('click', (event) => {
     const target = event.target;
-    if (target.id != "gallery" ) {
+    console.log(target.id);
+    if (target.id != "gallery" && document.querySelector('.modal-container') == null) {
+        createModuleContainer()
     }
+    if (target.id === 'modal-close-btn' || target.innerHTML === "X") {
+        const moduleContainer = document.querySelector('.modal-container');
+        gallery.removeChild(moduleContainer);
+    }
+    
 })
+
