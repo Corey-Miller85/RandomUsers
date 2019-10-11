@@ -33,3 +33,8 @@ function createCard(data) {
 
 fetchData().then(data => createCard(data));
 
+document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.id != "gallery" ) {
+    }
+})
