@@ -2,10 +2,18 @@ const gallery = document.getElementById('gallery');
 
 
 async function fetchData() {
-    const res = await fetch('https://randomuser.me/api/');
+    const res = await fetch('https://randomuser.me/api/?results=50');
     const data = await res.json();
-    const person = data.results[0];
-    gallery.innerHTML = `<img src="${person.picture.thumbnail}"> <span> ${person.name.first} ${person.name.last} </span>`;
+    data.results.forEach((person) => {
+        let html = "" 
+        html += `<p><img src="${person.picture.thumbnail}"> ${person.name.first} ${person.name.last} </p>`
+        gallery.innerHTML += html;
+        });
+    
+    
+    // const person = await data.results;
+
+    // gallery.innerHTML = `<img src="${person.picture.thumbnail}"> <span> ${person.name.first} ${person.name.last} </span>`;
 }
 
 fetchData();
