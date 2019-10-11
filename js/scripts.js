@@ -6,15 +6,10 @@ async function fetchData() {
     const data = await res.json();
     data.results.forEach((person) => {
         let html = "" 
-        html += `<p><img src="${person.picture.thumbnail}"> ${person.name.first} ${person.name.last} </p>`
+        html += `<img src="${person.picture.thumbnail}">${person.name.first} ${person.name.last}<br>`
         gallery.innerHTML += html;
         });
-    
-    
-    // const person = await data.results;
-
-    // gallery.innerHTML = `<img src="${person.picture.thumbnail}"> <span> ${person.name.first} ${person.name.last} </span>`;
-}
+    }
 
 fetchData();
 
