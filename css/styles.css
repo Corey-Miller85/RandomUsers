@@ -16,11 +16,12 @@ html, body {
 body {
     font-family: "Nunito", sans-serif;
     text-align: center;
-    background: white;
+    background-image: url(../images/lines.jpg);
 }
 
 header {
     padding: 15px 5px 5px;
+    background-color: slateblue;
 }
 
 .header-inner-container {

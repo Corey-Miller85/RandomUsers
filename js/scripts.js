@@ -2,7 +2,7 @@ const gallery = document.getElementById('gallery');
 let jsonData;
 
 async function fetchData() {
-    const res = await fetch('https://randomuser.me/api/?results=12');
+    const res = await fetch('https://randomuser.me/api/?nat=us&results=12');
     const data = await res.json();
     jsonData = data.results;
     return data
@@ -20,7 +20,6 @@ function createCard(data) {
         gallery.appendChild(card);
         card.appendChild(cardImg);
         card.appendChild(cardInfo);
-        console.log(person)
         cardImg.innerHTML = `
         <img class="card-img" src="${person.picture.large}" alt="profile picture">
         `
@@ -58,8 +57,10 @@ function createModalInfo(name) {
         const lastName = person.name.last;
         if (name[0] === firstName && name[name.length - 1] === lastName) {
             const infoContainer = document.querySelector('.modal-info-container');
-            const dob = person.dob.date.slice(0,10)
-            console.log(dob)
+            const dob = person.dob.date
+            const dobMonth = dob.slice(5,7);
+            const dobDay = dob.slice(8,10);
+            const dobYear = dob.slice(0,4);
             infoContainer.innerHTML =` 
                 <img class="modal-img" src="${person.picture.large}" alt="profile picture">
                 <h3 id="name" class="modal-name cap">${person.name.first} ${person.name.last}</h3>
@@ -68,7 +69,7 @@ function createModalInfo(name) {
                 <hr>
                 <p class="modal-text">${person.phone}</p>
                 <p class="modal-text">${person.location.street.number} ${person.location.street.name}., ${person.location.city}, ${person.location.state} ${person.location.postcode}</p>
-                <p class="modal-text">Birthday: ${dob}</p>
+                <p class="modal-text">Birthday: ${dobMonth}/${dobDay}/${dobYear}</p>
 
 
             `
@@ -79,7 +80,6 @@ function createModalInfo(name) {
 
 document.addEventListener('click', (event) => {
     const target = event.target;
-    console.log(target);
 
     //checks to see if click was in the bounds of the modal container
     if (target.id != "gallery" && document.querySelector('.modal-container') == null) {
