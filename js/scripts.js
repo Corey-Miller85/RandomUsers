@@ -8,98 +8,69 @@ async function fetchData() {
     return data
 };
 
+fetchData().then(data => createCard(data))
 
 function createCard(data) {
-    data.results.forEach((person) => {
+    const gallery = document.querySelector('.gallery');
+    const people = data.results;
+    people.forEach((person, index) => {
+        const name = ``;
         const card = document.createElement('div');
-        const cardImg = document.createElement('div');
-        const cardInfo = document.createElement('div');
-        card.className = ('card');
-        cardImg.className = ('card-img-container');
-        cardInfo.className = ('card-info-container');
+        card.classList.add('card');
         gallery.appendChild(card);
-        card.appendChild(cardImg);
-        card.appendChild(cardInfo);
-        cardImg.innerHTML = `
-        <img class="card-img" src="${person.picture.large}" alt="profile picture">
-        `
-        cardInfo.innerHTML = `
+        const image = document.createElement('div');
+        image.classList.add('card-img-container');
+        image.innerHTML = `<img class="card-img" src="${person.picture.medium}" alt="profile picture">`
+        card.appendChild(image);
+        const info = document.createElement('div');
+        info.classList.add('card-info-container');
+        info.innerHTML = `
         <h3 id="name" class="card-name cap">${person.name.first} ${person.name.last}</h3>
-                        <p class="card-text">${person.email}</p>
-                        <p class="card-text cap">${person.location.city}, ${person.location.state}</p>
+        <p class="card-text">${person.email}</p>
+        <p class="card-text cap">${person.location.city}, ${person.location.state}</p>
         `
-    }
-)};
+        card.appendChild(info);
 
-fetchData().then(data => createCard(data));
+        card.addEventListener ('click', (event) => {
+            if (event.target.parentNode.className != "gallery"){
+                document.querySelector(".modal-container").style.display = 'block';
+                console.log(event.target.parentNode.querySelector('#name').innerHTML);
+            } else {
+                document.querySelector(".modal-container").style.display = 'block';
+                console.log(event.target.querySelector('#name').innerHTML);
 
-function createModuleContainer() {
-    const moduleContainer = document.createElement('div')
-    moduleContainer.className = 'modal-container'
-    gallery.appendChild(moduleContainer);
-    const moduleDiv = document.createElement('div')
-    moduleDiv.className = "modal"
-    moduleContainer.appendChild(moduleDiv);
-    const moduleButton = document.createElement('button')
-    moduleButton.type = "button";
-    moduleButton.id = "modal-close-btn";
-    moduleButton.className = "modal-close-btn";
-    moduleButton.innerHTML = `<strong>X</strong>`;
-    moduleDiv.appendChild(moduleButton);
-    const modalInfo = document.createElement('div');
-    modalInfo.className = "modal-info-container"
-    moduleDiv.appendChild(modalInfo);
-}
-
-function createModalInfo(name) {
-    jsonData.forEach((person) => {
-        const firstName = person.name.first;
-        const lastName = person.name.last;
-        if (name[0] === firstName && name[name.length - 1] === lastName) {
-            const infoContainer = document.querySelector('.modal-info-container');
-            const dob = person.dob.date
-            const dobMonth = dob.slice(5,7);
-            const dobDay = dob.slice(8,10);
-            const dobYear = dob.slice(0,4);
-            infoContainer.innerHTML =` 
-                <img class="modal-img" src="${person.picture.large}" alt="profile picture">
-                <h3 id="name" class="modal-name cap">${person.name.first} ${person.name.last}</h3>
-                <p class="modal-text">${person.email}</p>
-                <p class="modal-text cap">${person.location.city}</p>
-                <hr>
-                <p class="modal-text">${person.phone}</p>
-                <p class="modal-text">${person.location.street.number} ${person.location.street.name}., ${person.location.city}, ${person.location.state} ${person.location.postcode}</p>
-                <p class="modal-text">Birthday: ${dobMonth}/${dobDay}/${dobYear}</p>
+            }
+        });
 
 
-            `
-        }
     });
 }
 
 
-document.addEventListener('click', (event) => {
-    const target = event.target;
+function createModal() {
+    const modalDiv = document.createElement('div');
+    modalDiv.classList.add('modal-container');
+    document.querySelector('body').appendChild(modalDiv)
+    const createDiv = document.createElement('div');
+    createDiv.classList.add('modal')
+    modalDiv.appendChild(createDiv);
+    createDiv.innerHTML = `
+        <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+        <div class="modal-info-container">
+        <img class="modal-img" src="https://placehold.it/125x125" alt="profile picture">
+        <h3 id="name" class="modal-name cap">name</h3>
+        <p class="modal-text">email</p>
+        <p class="modal-text cap">city</p>
+        <hr>
+        <p class="modal-text">(555) 555-5555</p>
+        <p class="modal-text">123 Portland Ave., Portland, OR 97204</p>
+        <p class="modal-text">Birthday: 10/21/2015</p>
+    `;
+    modalDiv.style.display = "none";
 
-    //checks to see if click was in the bounds of the modal container
-    if (target.id != "gallery" && document.querySelector('.modal-container') == null) {
-        if(event.target.className != "card" ) { 
-            let name = target.parentElement.parentElement.querySelector('div #name').innerHTML.split(" "); //backs up to the parent container to let code be dynamic (goes back up to the main container div)
-            createModuleContainer()
-            createModalInfo(name);
-        } else { //adjusts for the value already being in the root container
-            let name = target.querySelector('div #name').innerHTML.split(" ");
-            createModuleContainer()
-            createModalInfo(name);
-        }
+    modalDiv.addEventListener('click', (e) => {
+        modalDiv.style.display = "none";
+    });
+}
 
-    }
-
-    //checks to see if the click was registered on the X button.
-    if (target.id === 'modal-close-btn' || target.innerHTML === "X") {
-        const moduleContainer = document.querySelector('.modal-container');
-        gallery.removeChild(moduleContainer);
-    }
-    
-})
-
+createModal();
