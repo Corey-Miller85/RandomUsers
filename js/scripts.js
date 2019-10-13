@@ -52,7 +52,9 @@ function createModal() {
     modalDiv.style.display = "none";
     
     modalDiv.addEventListener('click', (e) => {
-        modalDiv.style.display = "none";
+        if (e.target.className === 'modal-close-btn' || e.target.innerHTML === "X") {
+            modalDiv.style.display = 'none'
+        }
     });
 }
 
@@ -79,3 +81,14 @@ function populateModal(name) {
         }
     });
 }
+
+// Search Bar code //
+
+const searchForm = document.createElement('form');
+searchForm.action = "#";
+searchForm.method = "GET";
+searchForm.innerHTML = `
+    <input type="search" id = "search-input" class="search-input" placeholder = "Search..." >
+    <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
+        `;
+document.querySelector('.search-container').appendChild(searchForm);
