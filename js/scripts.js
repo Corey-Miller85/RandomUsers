@@ -32,7 +32,7 @@ function createCard(data) {
         card.appendChild(info);
 
         card.addEventListener ('click', (event) => {
-            console.log(event.target)
+            console.log(event.target.className)
             if (event.target.parentNode.className != "gallery"){
                 const personNameParent = event.target.parentNode.querySelector('#name').innerHTML
                 populateModal(personNameParent);
@@ -69,17 +69,20 @@ createModal();
 function populateModal(name) { 
     jsonData.forEach((person) => {
         if (person.name.first + " " + person.name.last == name) {
+            let month = person.dob.date.slice(5, 7);
+            let day = person.dob.date.slice(8,10);
+            let year = person.dob.date.slice(0,4);
             document.querySelector('.modal').innerHTML = `
                 <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
                 <div class="modal-info-container">
-                <img class="modal-img" src="https://placehold.it/125x125" alt="profile picture">
+                <img class="modal-img" src="${person.picture.large}" alt="profile picture">
                 <h3 id="name" class="modal-name cap">${person.name.first} ${person.name.last}</h3>
                 <p class="modal-text">${person.email}</p>
                 <p class="modal-text cap">${person.location.city}</p>
                 <hr>
-                <p class="modal-text">(555) 555-5555</p>
-                <p class="modal-text">123 Portland Ave., Portland, OR 97204</p>
-                <p class="modal-text">Birthday: 10/21/2015</p>
+                <p class="modal-text">${person.cell}</p>
+                <p class="modal-text">${person.location.street.number} ${person.location.street.name}, ${person.location.city}, ${person.location.state} ${person.location.postcode}</p>
+                <p class="modal-text">Birthday: ${month}/${day}/${year}</p>
             `;
         }
     });
