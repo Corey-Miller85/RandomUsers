@@ -32,17 +32,9 @@ function createCard(data) {
         card.appendChild(info);
 
         card.addEventListener ('click', (event) => {
-            console.log(event.target.className)
-            if (event.target.parentNode.className != "gallery"){
-                const personNameParent = event.target.parentNode.querySelector('#name').innerHTML
-                populateModal(personNameParent);
-                document.querySelector(".modal-container").style.display = 'block';
-                
-            } else {
-                const personNameNoParent = event.target.querySelector('#name').innerHTML;
-                populateModal(personNameNoParent);
-                document.querySelector(".modal-container").style.display = 'block';
-            }
+            const personName = `${person.name.first} ${person.name.last}`
+            populateModal(personName);
+            document.querySelector(".modal-container").style.display = 'block';
         });
 
 
