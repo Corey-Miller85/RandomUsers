@@ -1,5 +1,7 @@
 const gallery = document.getElementById('gallery');
 let jsonData;
+let peopleArray = []
+let currentIndex = 0;
 
 async function fetchData() {
     const res = await fetch('https://randomuser.me/api/?nat=us&results=12');
@@ -8,7 +10,12 @@ async function fetchData() {
     return data
 };
 
-fetchData().then(data => createCard(data))
+fetchData()
+    .then(data => createCard(data))
+    .then(data => buildPeopleArray(data))
+    .then(addSearchBar())
+    .then(createModal());
+
 
 function createCard(data) {
     const gallery = document.querySelector('.gallery');
@@ -31,14 +38,16 @@ function createCard(data) {
         `
         card.appendChild(info);
 
+        //popular and show modal window for selected person.
         card.addEventListener ('click', (event) => {
             const personName = `${person.name.first} ${person.name.last}`
-            populateModal(personName);
+            currentIndex = index
+            
+            populateModal(currentIndex);
             document.querySelector(".modal-container").style.display = 'block';
         });
-
-
     });
+    return data
 }
 
 
@@ -50,45 +59,108 @@ function createModal() {
     createDiv.classList.add('modal')
     modalDiv.appendChild(createDiv);
     modalDiv.style.display = "none";
+    const btnContainer = document.createElement('div');
+    btnContainer.classList.add('modal-btn-container');
+    modalDiv.appendChild(btnContainer);
+    btnContainer.innerHTML= ` 
+        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+        <button type="button" id="modal-next" class="modal-next btn">Next</button>
+    `
     
     modalDiv.addEventListener('click', (e) => {
+        console.log(e.target)
         if (e.target.className === 'modal-close-btn' || e.target.innerHTML === "X") {
             modalDiv.style.display = 'none'
         }
+        if (e.target.id === 'modal-prev' && currentIndex > card) {
+            currentIndex -= 1;
+            populateModal(currentIndex)
+        }
+        if (e.target.id === 'modal-next' && currentIndex < 12 ){
+            currentIndex += 1;
+            populateModal((currentIndex))
+        }
+        
+        
     });
 }
 
-createModal();
 
-function populateModal(name) { 
-    jsonData.forEach((person) => {
-        if (person.name.first + " " + person.name.last == name) {
-            let month = person.dob.date.slice(5, 7);
-            let day = person.dob.date.slice(8,10);
-            let year = person.dob.date.slice(0,4);
-            document.querySelector('.modal').innerHTML = `
-                <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-                <div class="modal-info-container">
-                <img class="modal-img" src="${person.picture.large}" alt="profile picture">
-                <h3 id="name" class="modal-name cap">${person.name.first} ${person.name.last}</h3>
-                <p class="modal-text">${person.email}</p>
-                <p class="modal-text cap">${person.location.city}</p>
-                <hr>
-                <p class="modal-text">${person.cell}</p>
-                <p class="modal-text">${person.location.street.number} ${person.location.street.name}, ${person.location.city}, ${person.location.state} ${person.location.postcode}</p>
-                <p class="modal-text">Birthday: ${month}/${day}/${year}</p>
-            `;
-        }
-    });
+async function populateModal(index) { 
+    let person = jsonData[index];
+    let month = person.dob.date.slice(5, 7);
+    let day = person.dob.date.slice(8,10);
+    let year = person.dob.date.slice(0,4);
+    document.querySelector('.modal').innerHTML = `
+        <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+        <div class="modal-info-container">
+        <img class="modal-img" src="${person.picture.large}" alt="profile picture">
+        <h3 id="name" class="modal-name cap">${person.name.first} ${person.name.last}</h3>
+        <p class="modal-text">${person.email}</p>
+        <p class="modal-text cap">${person.location.city}</p>
+        <hr>
+        <p class="modal-text">${person.cell}</p>
+        <p class="modal-text">${person.location.street.number} ${person.location.street.name}, ${person.location.city}, ${person.location.state} ${person.location.postcode}</p>
+        <p class="modal-text">Birthday: ${month}/${day}/${year}</p>
+    `;
+
 }
 
 // Search Bar code //
+function addSearchBar(){
+    const searchForm = document.createElement('form');
+    searchForm.action = "#";
+    searchForm.method = "GET";
+    searchForm.innerHTML = `
+        <input type="search" id = "search-input" class="search-input" placeholder = "Search..." >
+        <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
+            `;
+    document.querySelector('.search-container').appendChild(searchForm);
+    const search = document.querySelector('#search-input')
+    
+    
+    //search through all cards on keyup 
+    searchForm.addEventListener('keyup', (e) => {
+        let card = document.querySelectorAll('.card');
+        card.forEach((ele, index) => {
+            const name = ele.querySelector('.card-name').textContent.toLowerCase();
+            const email = ele.querySelector('p.card-text').textContent.toLowerCase();
+            const location = ele.querySelector('p.cap').textContent.toLowerCase();
+            // search through cards name, emails, and locations  element and match with search results
+            if (name.includes(search.value.toLowerCase()) || email.includes(search.value.toLowerCase()) || location.includes(search.value.toLowerCase())) {
+                ele.style.display = 'flex'
+            } else {
+                ele.style.display = 'none'
+            }
+        })
+    });  
 
-const searchForm = document.createElement('form');
-searchForm.action = "#";
-searchForm.method = "GET";
-searchForm.innerHTML = `
-    <input type="search" id = "search-input" class="search-input" placeholder = "Search..." >
-    <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
-        `;
-document.querySelector('.search-container').appendChild(searchForm);
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let card = document.querySelectorAll('.card');
+        card.forEach((ele, index) => {
+            const name = ele.querySelector('.card-name').textContent.toLowerCase();
+            const email = ele.querySelector('p.card-text').textContent.toLowerCase();
+            const location = ele.querySelector('p.cap').textContent.toLowerCase();
+            // search through cards name, emails, and locations  element and match with search results
+            if (name.includes(search.value.toLowerCase()) || email.includes(search.value.toLowerCase()) || location.includes(search.value.toLowerCase())) {
+                ele.style.display = 'flex'
+            } else {
+                ele.style.display = 'none'
+            }
+        });
+        
+    })
+}
+
+function buildPeopleArray(jsonData) {
+    jsonData.results.forEach((object, index) => {
+       peopleArray.push(object);
+    });
+    return peopleArray;
+}
+
+
+
+
+
