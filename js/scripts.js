@@ -1,6 +1,6 @@
 const gallery = document.getElementById('gallery');
 let jsonData;
-let peopleArray = []
+let peopleArray = [];
 let currentIndex = 0;
 
 async function fetchData() {
@@ -11,17 +11,16 @@ async function fetchData() {
 };
 
 fetchData()
-    .then(data => createCard(data))
-    .then(data => buildPeopleArray(data))
+.then(data => buildPeopleArray())
+
+    .then(data => createCard())
     .then(addSearchBar())
     .then(createModal());
 
 
-function createCard(data) {
+function createCard() {
     const gallery = document.querySelector('.gallery');
-    const people = data.results;
-    people.forEach((person, index) => {
-        const name = ``;
+    peopleArray.forEach((person, index) => {
         const card = document.createElement('div');
         card.classList.add('card');
         gallery.appendChild(card);
@@ -40,14 +39,11 @@ function createCard(data) {
 
         //popular and show modal window for selected person.
         card.addEventListener ('click', (event) => {
-            const personName = `${person.name.first} ${person.name.last}`
-            currentIndex = index
-            
+            currentIndex = index;
             populateModal(currentIndex);
             document.querySelector(".modal-container").style.display = 'block';
         });
     });
-    return data
 }
 
 
@@ -68,17 +64,21 @@ function createModal() {
     `
     
     modalDiv.addEventListener('click', (e) => {
-        console.log(e.target)
         if (e.target.className === 'modal-close-btn' || e.target.innerHTML === "X") {
             modalDiv.style.display = 'none'
         }
-        if (e.target.id === 'modal-prev' && currentIndex > card) {
-            currentIndex -= 1;
-            populateModal(currentIndex)
+        if (e.target.id === 'modal-prev') {
         }
-        if (e.target.id === 'modal-next' && currentIndex < 12 ){
+        if (e.target.id === 'modal-next') {
             currentIndex += 1;
-            populateModal((currentIndex))
+            const cards = document.querySelectorAll('.card')
+            cards.forEach((element, index) => {
+                if (!element.className.includes('hidden')) {
+                    populateModal(currentIndex);
+                } else {
+                    currentIndex += 1;
+                }
+            });
         }
         
         
@@ -86,7 +86,7 @@ function createModal() {
 }
 
 
-async function populateModal(index) { 
+function populateModal(index) { 
     let person = jsonData[index];
     let month = person.dob.date.slice(5, 7);
     let day = person.dob.date.slice(8,10);
@@ -129,8 +129,12 @@ function addSearchBar(){
             // search through cards name, emails, and locations  element and match with search results
             if (name.includes(search.value.toLowerCase()) || email.includes(search.value.toLowerCase()) || location.includes(search.value.toLowerCase())) {
                 ele.style.display = 'flex'
+                ele.classList.remove('hidden')
+                changePeopleArray();
             } else {
                 ele.style.display = 'none'
+                ele.classList.add('hidden');
+                changePeopleArray();
             }
         })
     });  
@@ -153,13 +157,57 @@ function addSearchBar(){
     })
 }
 
-function buildPeopleArray(jsonData) {
-    jsonData.results.forEach((object, index) => {
-       peopleArray.push(object);
+function buildPeopleArray() {
+
+    jsonData.forEach((ele,index) => {
+        peopleArray.push(ele)
     });
-    return peopleArray;
+    
+
 }
 
+function changePeopleArray() {
+    peopleArray =[];
+    people = document.querySelectorAll('.card')
+    people.forEach((element, index) => {
+        if (element.style.display === "flex") {
+            peopleArray.push(element)
+        } else {
+            peopleArray.splice(index,1);
+        }
+    })
+}
+
+
+function testFunction() {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+        if (!card.className.includes('hidden')) {
+            console.log(card, index)
+        }
+    });
+    return cards
+}
+
+
+
+/* 
+render sibling eleement
+array of 0-11
+on press {
+    check to see if hidden {
+        if true, skip index
+    } else {
+        render
+    }
+}
+
+start with cards being built
+- create array with querySelectAll('.card')
+- dont delete the array elements, just skip like (if hidden index += 1 )
+- need to find a way to make an element as hidden
+    class = hidden?  on a foreach check to see if classList includes hidden, if true add 1 to index? 
+*/
 
 
 
