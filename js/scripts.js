@@ -87,6 +87,10 @@ function populateModal(name) {
         const matchName = person.name.first + " " + person.name.last;
         if (matchName == name) {
             const modalDiv = document.querySelector('.modal-container')
+            const dob = person.dob.date
+            const dobMonth = dob.slice(5,7);
+            const dobDay = dob.slice(8,10);
+            const dobYear = dob.slice(0,4);
         modalDiv.innerHTML = `
             <div class="modal">
             <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
@@ -98,7 +102,7 @@ function populateModal(name) {
             <hr>
             <p class="modal-text">(555) 555-5555</p>
             <p class="modal-text">123 Portland Ave., Portland, OR 97204</p>
-            <p class="modal-text">Birthday: 10/21/2015</p>
+            <p class="modal-text">Birthday: ${dobMonth}/${dobDay}/${dobYear}</p>
             </div>
              `;
         modalDiv.style.display = ""
