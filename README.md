@@ -4,6 +4,12 @@ App that fetches random user info from Public API, and formats data to nice look
 
 To do
  - complete populating modal info
- - Click event for X button on modal
- - previous and next buttons on modal
- - search functionality   
+ <!-- - previous and next buttons on modal (need click event listener) -->
+ - get prevouis and next buttons to roll over the index
+ - search functionality 
+
+ CSS:
+ - Addeda background image.   
+
+ Bugs: 
+ - when clicking on blank part of card, the wrong person is populated in modal
