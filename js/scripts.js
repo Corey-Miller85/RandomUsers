@@ -76,8 +76,18 @@ function createModal() {
     
     body.appendChild(modalDiv);
     modalDiv.style.display = 'none';
-    
+
+    modalDiv.addEventListener('click', (e) => {
+        const target = e.target
+        //checks to see if the click was registered on the X button.
+        if (target.id === 'modal-close-btn' || target.innerHTML === "X") {
+            const moduleContainer = document.querySelector('.modal-container');
+            moduleContainer.style.display = 'none';
+        }
+    });
 }
+    
+    
 /**
  * takes in index number and finds matching index from visiable people array for populating modal
  * @param {number} indexNumber 
