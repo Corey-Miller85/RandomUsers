@@ -21,7 +21,7 @@ body {
 
 header {
     padding: 15px 5px 5px;
-    background-color: slateblue;
+    background-color: #ed8f1c;
 }
 
 .header-inner-container {
@@ -88,7 +88,7 @@ header h1 {
     max-width: 360px;
     margin: 10px 10px 20px;
     padding: 10px;
-    background: rgba(245, 245, 245, 0.9);
+    background: #e4dfcc;
     border-radius: 0.25em;
     border: 1px solid rgba(50, 50, 50, 0.3);
     transition: .4s ease-out;
@@ -141,7 +141,7 @@ header h1 {
     min-height: 415px;
     margin: 10px auto auto;
     padding-bottom: 15px;
-    background: rgba(255, 255, 255, 1);
+    background: #e4dfcc;
     border-radius: 0.25em;
     border: 1px solid rgba(100, 100, 100, 0.3);
     transition: .4s ease-out;
