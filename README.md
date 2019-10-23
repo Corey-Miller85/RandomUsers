@@ -1,15 +1,17 @@
 # RandomUsers
 App that fetches random user info from Public API, and formats data to nice looking page.
 
+Changes to CSS: 
+- created background image 
+- changed overall color scheme
 
-To do
- - complete populating modal info
- <!-- - previous and next buttons on modal (need click event listener) -->
- - get prevouis and next buttons to roll over the index
- - search functionality 
++ would like to add glow under card on mouseover
 
- CSS:
- - Addeda background image.   
+Changes to JavaScript: 
+- added Previous and Next button to modal window 
+- when at first or last, next and prevouis button will loop back to beginning or end of list. 
+- adds search functionality that allows for searching all visiable data of cards. 
 
- Bugs: 
- - when clicking on blank part of card, the wrong person is populated in modal
+Changes needed: 
+- Assign correct theme color to prevouis and next button container. 
+- Add glow (green) to hover event on cards.

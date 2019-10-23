@@ -100,6 +100,7 @@ function populateModal(visiableIndex) {
         jsonDataName = person.name.first + " " + person.name.last
         if (visablePeopleName === jsonDataName) {
                 const modalDiv = document.querySelector('.modal-container')
+                //slices data to adhere to styling
                 const dob = person.dob.date
                 const dobMonth = dob.slice(5,7);
                 const dobDay = dob.slice(8,10);
@@ -143,9 +144,6 @@ function populateModal(visiableIndex) {
                     currentIndex = 0
                     populateModal(currentIndex);
                 }
-
-                // if index = 11 reset to 0, need to make dynamic, with modelo math.
-
             });
 
         }
@@ -202,8 +200,10 @@ function addSearchBar(){
         
     })
 }
-
-
+/**
+ * 
+ * @param {string} personName Searches for index of persons name in visiableCards array and sets current index to their
+ */
 function findName(personName) {
     visibleCards.forEach((person,index) => {
         const visiableListName = person.querySelector('#name').textContent;
